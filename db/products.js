@@ -10,6 +10,11 @@ function retrieve() {
   return collection;
 }
 
+function retrieveOne(productId) {
+  const productIndex = collection.findIndex((elem) => elem.id === Number(productId));
+  return collection[productIndex];
+}
+
 function update(obj) {
   const productIndex = collection.findIndex((elem) => elem.id === Number(obj.id));
 
@@ -39,6 +44,7 @@ function remove(productId) {
 module.exports = {
   create,
   retrieve,
+  retrieveOne,
   update,
   remove,
 };

@@ -10,8 +10,7 @@ routerProducts
     const productCollection = {
       products: productDB.retrieve(),
     };
-    res.render('main', productCollection);
-    //res.send(`${JSON.stringify(productDB.retrieve())}`);
+    res.render('templates/products/index', productCollection);
   })
   .post((req, res) => {
     const hasKeys = req.body.name && req.body.price && req.body.inventory;
@@ -43,11 +42,14 @@ routerProducts
   });
 
 routerProducts.route('/:productId').get((req, res) => {
-  const productCollection = {
-    products: productDB.retrieve(),
-  };
-  console.log(productCollection[0].products);
-  res.send(`Product: ${productCollection[productId - 1]}`);
+  const id = req.url.slice(1);
+  res.send(`Product: ${JSON.stringify(productDB.retrieveOne(id))}`);
+});
+
+routerProducts.route('/:productId/edit').get((req, res) => {
+  const endIndex = req.url.indexOf('/', 1) - 1;
+  const id = req.url.substr(1, endIndex);
+  res.send(`Product: ${JSON.stringify(productDB.retrieveOne(id))}`);
 });
 
 module.exports = routerProducts;
