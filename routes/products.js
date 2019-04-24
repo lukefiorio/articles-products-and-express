@@ -7,7 +7,10 @@ let productId = 1;
 routerProducts
   .route('/')
   .get((req, res) => {
-    res.send(`${JSON.stringify(productDB.retrieve())}`);
+    const products = JSON.stringify(productDB.retrieve());
+    res.render('main', products.name);
+    console.log(JSON.stringify(productDB.retrieve()));
+    //res.send(`${JSON.stringify(productDB.retrieve())}`);
   })
   .post((req, res) => {
     const hasKeys = req.body.name && req.body.price && req.body.inventory;
@@ -20,10 +23,18 @@ routerProducts
     }
   })
   .put((req, res) => {
-    console.log(req.url);
     const hasKeys = req.body.id;
     if (hasKeys) {
-      productDB.update(req.body.id);
+      productDB.update(req.body);
+      res.send(`{ "success": true}`);
+    } else if (!hasKeys) {
+      res.send(`{ "success": false}`);
+    }
+  })
+  .delete((req, res) => {
+    const hasKeys = req.body.id;
+    if (hasKeys) {
+      productDB.remove(req.body.id);
       res.send(`{ "success": true}`);
     } else if (!hasKeys) {
       res.send(`{ "success": false}`);
