@@ -37,8 +37,8 @@ function remove(productId) {
 }
 
 module.exports = {
-  create: create,
-  retrieve: retrieve,
-  update: update,
-  remove: remove,
+  create,
+  retrieve,
+  update,
+  remove,
 };

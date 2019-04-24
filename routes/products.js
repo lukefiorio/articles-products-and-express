@@ -7,9 +7,10 @@ let productId = 1;
 routerProducts
   .route('/')
   .get((req, res) => {
-    const products = JSON.stringify(productDB.retrieve());
-    res.render('main', products.name);
-    console.log(JSON.stringify(productDB.retrieve()));
+    const productCollection = {
+      products: productDB.retrieve(),
+    };
+    res.render('main', productCollection);
     //res.send(`${JSON.stringify(productDB.retrieve())}`);
   })
   .post((req, res) => {
@@ -40,5 +41,13 @@ routerProducts
       res.send(`{ "success": false}`);
     }
   });
+
+routerProducts.route('/:productId').get((req, res) => {
+  const productCollection = {
+    products: productDB.retrieve(),
+  };
+  console.log(productCollection[0].products);
+  res.send(`Product: ${productCollection[productId - 1]}`);
+});
 
 module.exports = routerProducts;
