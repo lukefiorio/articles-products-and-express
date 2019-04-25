@@ -9,7 +9,23 @@
 </head>
 
 <body>
-  New form goes here
+  <form action="/products" method="post">
+    <div>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name">
+    </div>
+    <div>
+      <label for="price">Price:</label>
+      <input type="text" id="price" name="price">
+    </div>
+    <div>
+      <label for="inventory">Inventory</label>
+      <input type="text" id="inventory" name="inventory">
+    </div>
+    <div class="button">
+      <button type="submit">Submit your Product</button>
+    </div>
+  </form>
 </body>
 
 </html>

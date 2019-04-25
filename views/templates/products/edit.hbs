@@ -10,13 +10,24 @@
 
 <body>
   {{> header}}
-  Form goes here
-  <div>
-    <h2>{{name}}</h2>
-    <h2>{{price}}</h2>
-    <h2>{{inventory}}</h2>
-    <h2>{{id}}</h2>
-  </div>
+
+  <form action="#" method="post">
+    <div>
+      <label for="name">Name:</label>
+      <input type="text" value={{name}} id="name" name="name">
+    </div>
+    <div>
+      <label for="price">Price:</label>
+      <input type="text" value={{price}} id="price" name="price">
+    </div>
+    <div>
+      <label for="inventory">Inventory</label>
+      <input type="text" value={{inventory}} id="inventory" name="inventory">
+    </div>
+    <div class="button">
+      <button type="submit">Submit your Product</button>
+    </div>
+  </form>
 
 </body>
 
