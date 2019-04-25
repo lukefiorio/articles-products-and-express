@@ -1,16 +1,11 @@
-const collection = [];
+const articleCollection = {
+  articles: [],
+};
 
-function all() {
-  return collection;
-}
-
-function add(obj, productId) {
-  collection.push(obj);
-  collection[productId - 1].id = productId;
-  return collection;
+function retrieveAll() {
+  return productCollection;
 }
 
 module.exports = {
-  all: all,
-  add: add,
+  retrieveAll,
 };

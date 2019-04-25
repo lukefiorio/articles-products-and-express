@@ -1,49 +1,81 @@
-const collection = [];
+const productCollection = {
+  products: [],
+};
+let productId = 1;
 
-function create(obj, productId) {
-  collection.push(obj);
-  collection[productId - 1].id = productId;
-  return collection;
+function create(obj) {
+  const hasKeys = obj.name && obj.price && obj.inventory;
+
+  if (hasKeys) {
+    obj.id = productId;
+    productCollection.products.push(obj);
+    productId++;
+    return `{ "success": true}`;
+  } else if (!hasKeys) {
+    return `{ "success": false}`;
+  }
 }
 
-function retrieve() {
-  return collection;
+function retrieveAll() {
+  return productCollection;
 }
 
 function retrieveOne(productId) {
-  const productIndex = collection.findIndex((elem) => elem.id === Number(productId));
-  return collection[productIndex];
-}
-
-function update(obj) {
-  const productIndex = collection.findIndex((elem) => elem.id === Number(obj.id));
+  // check that productID is in collection.
+  const productIndex = productCollection.products.findIndex((elem) => elem.id === Number(productId));
+  if (productIndex === -1) {
+    return `{ "success": false. Product ID not found }`;
+  }
 
   if (productIndex > -1) {
+    return productCollection.products[productIndex];
+  }
+}
+
+function update(obj, urlId) {
+  // check that productID is in collection.
+  const productIndex = productCollection.products.findIndex((elem) => elem.id === Number(urlId));
+  if (productIndex === -1) {
+    return `{ "success": false. Product ID not found }`;
+  }
+
+  // check that at least one product property is provided
+  const hasKeys = obj.name || obj.price || obj.inventory;
+  if (!hasKeys) {
+    return `{ "success": false. Provide field value(s) to modify. }`;
+  }
+
+  if (hasKeys && productIndex > -1) {
+    // apply modified values
     if (obj.name) {
-      collection[productIndex].name = obj.name;
+      productCollection.products[productIndex].name = obj.name;
     }
     if (obj.price) {
-      collection[productIndex].price = obj.price;
+      productCollection.products[productIndex].price = obj.price;
     }
     if (obj.inventory) {
-      collection[productIndex].inventory = obj.inventory;
+      productCollection.products[productIndex].inventory = obj.inventory;
     }
+    return `{ "success": true}`;
   }
-
-  return collection;
 }
 
-function remove(productId) {
-  const productIndex = collection.findIndex((elem) => elem.id === Number(productId));
-  if (productIndex > -1) {
-    collection.splice(productIndex, 1);
+function remove(urlId) {
+  // check that productID is in collection.
+  const productIndex = productCollection.products.findIndex((elem) => elem.id === Number(urlId));
+  if (productIndex === -1) {
+    return `{ "success": false. Product ID not found }`;
   }
-  return collection;
+
+  if (productIndex > -1) {
+    productCollection.products.splice(productIndex, 1);
+    return `{ "success": true}`;
+  }
 }
 
 module.exports = {
   create,
-  retrieve,
+  retrieveAll,
   retrieveOne,
   update,
   remove,

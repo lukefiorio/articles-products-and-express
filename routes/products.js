@@ -2,54 +2,38 @@ const express = require('express');
 const routerProducts = express.Router();
 const productDB = require('./../db/products.js');
 
-let productId = 1;
-
 routerProducts
   .route('/')
   .get((req, res) => {
-    const productCollection = {
-      products: productDB.retrieve(),
-    };
-    res.render('templates/products/index', productCollection);
+    res.render('templates/products/index', productDB.retrieveAll());
   })
   .post((req, res) => {
-    const hasKeys = req.body.name && req.body.price && req.body.inventory;
-    if (hasKeys) {
-      productDB.create(req.body, productId);
-      productId++;
-      res.send(`{ "success": true}`);
-    } else if (!hasKeys) {
-      res.send(`{ "success": false}`);
-    }
-  })
-  .put((req, res) => {
-    const hasKeys = req.body.id;
-    if (hasKeys) {
-      productDB.update(req.body);
-      res.send(`{ "success": true}`);
-    } else if (!hasKeys) {
-      res.send(`{ "success": false}`);
-    }
-  })
-  .delete((req, res) => {
-    const hasKeys = req.body.id;
-    if (hasKeys) {
-      productDB.remove(req.body.id);
-      res.send(`{ "success": true}`);
-    } else if (!hasKeys) {
-      res.send(`{ "success": false}`);
-    }
+    res.send(productDB.create(req.body));
   });
 
-routerProducts.route('/:productId').get((req, res) => {
-  const id = req.url.slice(1);
-  res.send(`Product: ${JSON.stringify(productDB.retrieveOne(id))}`);
+routerProducts.route('/new').get((req, res) => {
+  res.render('templates/products/new', productDB.retrieveAll());
 });
+
+routerProducts
+  .route('/:productId')
+  .get((req, res) => {
+    const id = req.url.slice(1);
+    res.render('templates/products/product', productDB.retrieveOne(id));
+  })
+  .put((req, res) => {
+    const id = req.url.slice(1);
+    res.send(productDB.update(req.body, id));
+  })
+  .delete((req, res) => {
+    const id = req.url.slice(1);
+    res.send(productDB.remove(id));
+  });
 
 routerProducts.route('/:productId/edit').get((req, res) => {
   const endIndex = req.url.indexOf('/', 1) - 1;
   const id = req.url.substr(1, endIndex);
-  res.send(`Product: ${JSON.stringify(productDB.retrieveOne(id))}`);
+  res.render('templates/products/edit', productDB.retrieveOne(id));
 });
 
 module.exports = routerProducts;
