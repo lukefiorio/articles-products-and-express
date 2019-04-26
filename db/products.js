@@ -1,6 +1,7 @@
 const productCollection = {
   products: [],
   message: '',
+  returnPage: '',
 };
 let productId = 1;
 
@@ -27,12 +28,21 @@ function retrieveOne(productId) {
   // check that productID is in collection.
   const productIndex = productCollection.products.findIndex((elem) => elem.id === Number(productId));
   if (productIndex === -1) {
-    return '{ "success": false, "message": "Product ID not found" }';
+    productCollection.message = '{ "success": false, "message": "Product ID not found" }';
+    productCollection.returnPage = 'index';
+    return productCollection;
   }
 
-  if (productIndex > -1) {
-    return productCollection.products[productIndex];
-  }
+  const productToRetrieve = {
+    name: productCollection.products[productIndex].name,
+    price: productCollection.products[productIndex].price,
+    inventory: productCollection.products[productIndex].inventory,
+    id: productCollection.products[productIndex].id,
+    returnPage: 'product',
+  };
+
+  //productCollection.returnPage = 'product';
+  return productToRetrieve;
 }
 
 function update(obj, urlId) {
@@ -77,11 +87,13 @@ function remove(urlId) {
   // check that productID is in collection.
   const productIndex = productCollection.products.findIndex((elem) => elem.id === Number(urlId));
   if (productIndex === -1) {
-    return '{ "success": false. Product ID not found }';
+    productCollection.message = '{ "success": false, "message": "Product ID not found" }';
+    return productCollection;
   }
 
   productCollection.products.splice(productIndex, 1);
-  return '{ "success": true}';
+  productCollection.message = '{ "success": true}';
+  return productCollection;
 }
 
 function emptyMessage() {
