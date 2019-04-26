@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="/css/styles.css" />
+  <title>Document</title>
+</head>
+
+<body>
+  {{> header}}
+
+  {{message}}
+
+  <div>
+    <div>{{title}}</div>
+    <div>{{body}}</div>
+    <div>{{author}}</div>
+    <div>{{urlTitle}}</div>
+  </div>
+
+  <form action="/articles/{{urlTitle}}/edit" method="get">
+
+    <div class="button">
+      <button type="submit">EDIT</button>
+    </div>
+  </form>
+
+  <form action="/articles/{{urlTitle}}?_method=DELETE" method="post">
+
+    <div class="button">
+      <button type="submit">DELETE</button>
+    </div>
+  </form>
+</body>
+
+</html>

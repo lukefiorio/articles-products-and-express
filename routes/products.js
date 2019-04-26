@@ -9,7 +9,6 @@ routerProducts
     res.render('templates/products/index', productDB.retrieveAll());
   })
   .post((req, res) => {
-    //res.send(productDB.create(req.body));
     res.render('templates/products/index', productDB.create(req.body));
   });
 
@@ -22,18 +21,17 @@ routerProducts
   .get((req, res) => {
     const id = req.url.slice(1);
     productDB.emptyMessage();
-    res.render('templates/products/product', productDB.retrieveOne(id));
+    res.render(`templates/products/${productDB.retrieveOne(id).returnPage}`, productDB.retrieveOne(id));
   })
   .put((req, res) => {
     const endIndexQmark = req.url.indexOf('?', 1) - 1;
     const id = req.url.substr(1, endIndexQmark);
-    //res.send(productDB.update(req.body, id));
     res.render('templates/products/product', productDB.update(req.body, id));
   })
   .delete((req, res) => {
     const endIndexQmark = req.url.indexOf('?', 1) - 1;
     const id = req.url.substr(1, endIndexQmark);
-    res.send(productDB.remove(id));
+    res.render('templates/products/index', productDB.remove(id));
   });
 
 routerProducts.route('/:productId/edit').get((req, res) => {
