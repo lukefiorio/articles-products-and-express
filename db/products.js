@@ -1,8 +1,8 @@
 const productCollection = {
-  products: [{ name: 'shampoo', price: '$10', inventory: '200', id: 1 }],
+  products: [],
   message: '',
 };
-let productId = 2;
+let productId = 1;
 
 function create(obj) {
   const hasKeys = obj.name && obj.price && obj.inventory;
