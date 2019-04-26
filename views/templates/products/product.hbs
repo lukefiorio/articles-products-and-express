@@ -5,17 +5,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="../css/styles.css" />
   <title>Document</title>
 </head>
 
 <body>
   {{> header}}
+
+  {{message}}
+
   <div>
-    <h2>{{name}}</h2>
-    <h2>{{price}}</h2>
-    <h2>{{inventory}}</h2>
-    <h2>{{id}}</h2>
+    <div>{{name}}</div>
+    <div>{{price}}</div>
+    <div>{{inventory}}</div>
+    <div>{{id}}</div>
   </div>
+
+  <form action="/products/{{id}}/edit" method="get">
+
+    <div class="button">
+      <button type="submit">EDIT</button>
+    </div>
+  </form>
+
+  <form action="/products/{{id}}?_method=DELETE" method="post">
+
+    <div class="button">
+      <button type="submit">DELETE</button>
+    </div>
+  </form>
 </body>
 
 </html>
