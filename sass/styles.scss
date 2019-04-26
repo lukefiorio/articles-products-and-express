@@ -135,3 +135,13 @@ input {
 .EditItem {
   margin-left: 10px;
 }
+
+.optionButtons {
+  display: flex;
+}
+
+.optionButton {
+  height: 20px;
+  width: 50px;
+  margin: 5px;
+}

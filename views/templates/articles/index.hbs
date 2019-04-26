@@ -24,15 +24,15 @@
     <div>{{title}}</div>
     <div>{{body}}</div>
     <div>{{author}}</div>
-    <form action="/articles/{{urlTitle}}" method="get">
-      <button type="submit">View</button>
-    </form>
-    <form action="/articles/{{urlTitle}}/edit" method="get">
-      <button type="submit">Edit</button>
-    </form>
-    <form action="/articles/{{urlTitle}}?_method=DELETE" method="post">
-      <button type="submit">Delete</button>
-    </form>
+    <div class="optionButtons">
+      <button class="optionButton" onclick="location.href='/articles/{{urlTitle}}'">View</button>
+      <form action="/articles/{{urlTitle}}/edit" method="get">
+        <button class="optionButton" type="submit">Edit</button>
+      </form>
+      <form action="/articles/{{urlTitle}}?_method=DELETE" method="post">
+        <button class="optionButton" type="submit">Delete</button>
+      </form>
+    </div>
   </div>
   {{/each}}
 

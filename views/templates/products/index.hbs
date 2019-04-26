@@ -25,15 +25,15 @@
     <div>{{price}}</div>
     <div>{{inventory}}</div>
     <div>{{id}}</div>
-    <form action="/products/{{id}}" method="get">
-      <button type="submit">View</button>
-    </form>
-    <form action="/products/{{id}}/edit" method="get">
-      <button type="submit">Edit</button>
-    </form>
-    <form action="/products/{{id}}?_method=DELETE" method="post">
-      <button type="submit">Delete</button>
-    </form>
+    <div class="optionButtons">
+      <button class="optionButton" onclick="location.href='/products/{{id}}'">View</button>
+      <form action="/products/{{id}}/edit" method="get">
+        <button class="optionButton" type="submit">Edit</button>
+      </form>
+      <form action="/products/{{id}}?_method=DELETE" method="post">
+        <button class="optionButton" type="submit">Delete</button>
+      </form>
+    </div>
   </div>
   {{/each}}
 </body>
