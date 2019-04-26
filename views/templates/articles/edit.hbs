@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="/css/styles.css" />
-  <link href="https://fonts.googleapis.com/css?family=Kelly+Slab|Poiret+One" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Kelly+Slab|Poiret+One|Amaranth" rel="stylesheet">
   <title>Document</title>
 </head>
 
@@ -14,30 +14,31 @@
   {{> header}}
   {{> nav}}
 
-  <form action="/articles/{{urlTitle}}?_method=PUT" method="post">
-    <div>
-      <label for="title">Title:</label>
-      <input type="text" value="{{title}}" id="title" name="title">
-    </div>
-    <div>
-      <label for="body">Body:</label>
-      <input type="text" value="{{body}}" id="body" name="body">
-    </div>
-    <div>
-      <label for="author">Author:</label>
-      <input type="text" value="{{author}}" id="author" name="author">
-    </div>
-    <div class="button">
-      <button type="submit">Submit your Article</button>
-    </div>
-  </form>
+  <div class="submitForm">
+    <form class="editForm" action="/articles/{{urlTitle}}?_method=PUT" method="post">
+      <div class="formRow">
+        <label for="title">Title:</label>
+        <input type="text" value="{{title}}" id="title" name="title">
+      </div>
+      <div class="formRow">
+        <label for="body">Body:</label>
+        <input type="text" value="{{body}}" id="body" name="body">
+      </div>
+      <div class="formRow">
+        <label for="author">Author:</label>
+        <input type="text" value="{{author}}" id="author" name="author">
+      </div>
+      <div class="button">
+        <button type="submit">Submit Changes</button>
+      </div>
+    </form>
 
-  <form action="/articles/{{urlTitle}}?_method=DELETE" method="post">
-
-    <div class="button">
-      <button type="submit">DELETE</button>
-    </div>
-  </form>
+    <form action="/articles/{{urlTitle}}?_method=DELETE" method="post">
+      <div class="button">
+        <button type="submit">Delete</button>
+      </div>
+    </form>
+  </div>
 </body>
 
 </html>

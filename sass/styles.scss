@@ -15,7 +15,7 @@ body {
   padding: 0px;
 }
 
-#title {
+#siteTitle {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -23,6 +23,10 @@ body {
   font-family: 'Poiret One', cursive;
   font-weight: bold;
   height: 20px;
+  padding: 20px;
+  position: sticky;
+  top: 0px;
+  background-color: lightblue;
 }
 
 .nav:hover {
@@ -35,6 +39,8 @@ body {
   justify-content: center;
   height: $largeBannerHeight;
   background: $navDarkColor;
+  position: sticky;
+  top: 55px;
 }
 
 .nav {
@@ -83,4 +89,49 @@ body {
   border: 1px gray dotted;
   margin: 10px;
   padding: 5px;
+  font-family: 'Amaranth', sans-serif;
+}
+
+.submitForm {
+  display: table;
+  margin: 10px;
+}
+
+.formRow {
+  display: table-row;
+}
+
+label {
+  display: table-cell;
+  font-family: 'Amaranth', sans-serif;
+}
+
+input {
+  display: table-cell;
+  margin-left: 10px;
+  font-family: 'Amaranth', sans-serif;
+}
+
+.detailBox {
+  display: table;
+  margin: 10px;
+}
+
+.detailRow {
+  display: table-row;
+}
+
+.attribute {
+  display: table-cell;
+  font-family: 'Amaranth', sans-serif;
+}
+
+.detail {
+  display: table-cell;
+  font-family: 'Amaranth', sans-serif;
+  padding-left: 10px;
+}
+
+.EditItem {
+  margin-left: 10px;
 }

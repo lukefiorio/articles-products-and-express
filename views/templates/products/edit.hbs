@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="/css/styles.css" />
-  <link href="https://fonts.googleapis.com/css?family=Kelly+Slab|Poiret+One" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Kelly+Slab|Poiret+One|Amaranth" rel="stylesheet">
   <title>Document</title>
 </head>
 
@@ -14,30 +14,32 @@
   {{> header}}
   {{> nav}}
 
-  <form action="/products/{{id}}?_method=PUT" method="post">
-    <div>
-      <label for="name">Name:</label>
-      <input type="text" value="{{name}}" id="name" name="name">
-    </div>
-    <div>
-      <label for="price">Price:</label>
-      <input type="text" value="{{price}}" id="price" name="price">
-    </div>
-    <div>
-      <label for="inventory">Inventory:</label>
-      <input type="text" value="{{inventory}}" id="inventory" name="inventory">
-    </div>
-    <div class="button">
-      <button type="submit">Submit your Product</button>
-    </div>
-  </form>
+  <div class="submitForm">
+    <form class="editForm" action="/products/{{id}}?_method=PUT" method="post">
+      <div class="formRow">
+        <label for="name">Name:</label>
+        <input type="text" value="{{name}}" id="name" name="name">
+      </div>
+      <div class="formRow">
+        <label for="price">Price:</label>
+        <input type="text" value="{{price}}" id="price" name="price">
+      </div>
+      <div class="formRow">
+        <label for="inventory">Inventory:</label>
+        <input type="text" value="{{inventory}}" id="inventory" name="inventory">
+      </div>
+      <div class="button">
+        <button type="submit">Submit Changes</button>
+      </div>
+    </form>
 
-  <form action="/products/{{id}}?_method=DELETE" method="post">
+    <form action="/products/{{id}}?_method=DELETE" method="post">
+      <div class="button">
+        <button type="submit">Delete</button>
+      </div>
+    </form>
+  </div>
 
-    <div class="button">
-      <button type="submit">DELETE</button>
-    </div>
-  </form>
 
 </body>
 
