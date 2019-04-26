@@ -6,19 +6,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="/css/styles.css" />
+  <link href="https://fonts.googleapis.com/css?family=Kelly+Slab|Poiret+One" rel="stylesheet">
   <title>Document</title>
 </head>
 
 <body>
   {{> header}}
+  {{> nav}}
   <p>{{message}}</p>
 
+  <form action="/products/new" method="get">
+    <button class="AddItem" type="submit">Add a Product</button>
+  </form>
+
   {{#each products}}
-  <div>
+  <div class="content">
     <div>{{name}}</div>
     <div>{{price}}</div>
     <div>{{inventory}}</div>
     <div>{{id}}</div>
+    <form action="/products/{{id}}/edit" method="get">
+      <button class="EditItem" type="submit">Edit</button>
+    </form>
+    <form action="/products/{{id}}?_method=DELETE" method="post">
+      <button class="EditItem" type="submit">Delete</button>
+    </form>
   </div>
   {{/each}}
 </body>
