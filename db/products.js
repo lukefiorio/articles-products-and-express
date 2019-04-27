@@ -1,7 +1,7 @@
 const productCollection = {
   products: [],
   message: '',
-  returnPage: '',
+  showMessage: false,
 };
 let productId = 1;
 
@@ -13,10 +13,10 @@ function create(obj) {
     productCollection.products.push(obj);
     productId++;
     productCollection.message = '{ "success": true}';
-    return productCollection;
+    productCollection.showMessage = true;
   } else {
     productCollection.message = '{ "success": false}';
-    return productCollection;
+    productCollection.showMessage = true;
   }
 }
 
@@ -29,20 +29,11 @@ function retrieveOne(productId) {
   const productIndex = productCollection.products.findIndex((elem) => elem.id === Number(productId));
   if (productIndex === -1) {
     productCollection.message = '{ "success": false, "message": "Product ID not found" }';
-    productCollection.returnPage = 'index';
+    productCollection.showMessage = true;
     return productCollection;
   }
 
-  const productToRetrieve = {
-    name: productCollection.products[productIndex].name,
-    price: productCollection.products[productIndex].price,
-    inventory: productCollection.products[productIndex].inventory,
-    id: productCollection.products[productIndex].id,
-    returnPage: 'product',
-  };
-
-  //productCollection.returnPage = 'product';
-  return productToRetrieve;
+  return productCollection.products[productIndex];
 }
 
 function update(obj, urlId) {
@@ -50,12 +41,12 @@ function update(obj, urlId) {
   const productIndex = productCollection.products.findIndex((elem) => elem.id === Number(urlId));
   if (productIndex === -1) {
     productCollection.message = '{ "success": false, "message": "Product ID not found" }';
-    return productCollection;
+    productCollection.showMessage = true;
+    return;
   }
 
   let msg = '';
   const hasKeys = obj.name || obj.price || obj.inventory;
-  // check that at least one product property is provided
   if (!hasKeys) {
     msg = '{ "success": false, "message": "No field values were provided" }';
   } else {
@@ -71,16 +62,13 @@ function update(obj, urlId) {
     }
     msg = '{ "success": true }';
   }
+  // apply these values to individual product to handle redirect route = '/product/:id'
+  productCollection.products[productIndex].message = msg;
+  productCollection.products[productIndex].showMessage = true;
 
-  // apply values individually so they don't map back to original object
-  const productToModify = {
-    name: productCollection.products[productIndex].name,
-    price: productCollection.products[productIndex].price,
-    inventory: productCollection.products[productIndex].inventory,
-    id: productCollection.products[productIndex].id,
-    message: msg,
-  };
-  return productToModify;
+  // apply these values to colletion to handle redirect route = '/product'
+  productCollection.message = msg;
+  productCollection.showMessage = true;
 }
 
 function remove(urlId) {
@@ -88,16 +76,39 @@ function remove(urlId) {
   const productIndex = productCollection.products.findIndex((elem) => elem.id === Number(urlId));
   if (productIndex === -1) {
     productCollection.message = '{ "success": false, "message": "Product ID not found" }';
-    return productCollection;
+    productCollection.showMessage = true;
+    return;
   }
 
   productCollection.products.splice(productIndex, 1);
   productCollection.message = '{ "success": true}';
-  return productCollection;
+  productCollection.showMessage = true;
 }
 
-function emptyMessage() {
-  return (productCollection.message = '');
+function removeMessage(id = 0) {
+  productCollection.showMessage = false;
+  const index = productCollection.products.findIndex((elem) => elem.id === Number(id));
+  if (id !== 0 && index > -1) {
+    productCollection.products[index].showMessage = false;
+  }
+}
+
+function getMessage(id = 0) {
+  const index = productCollection.products.findIndex((elem) => elem.id === Number(id));
+  if (id !== 0 && index > -1) {
+    return productCollection.products[index].message;
+  }
+  return productCollection.message;
+}
+
+function getIndex(id) {
+  const index = productCollection.products.findIndex((elem) => elem.id === Number(id));
+  if (index === -1) {
+    productCollection.message = '{ "success": false, "message": "Product ID not found" }';
+    productCollection.showMessage = true;
+  }
+
+  return index;
 }
 
 module.exports = {
@@ -106,5 +117,7 @@ module.exports = {
   retrieveOne,
   update,
   remove,
-  emptyMessage,
+  removeMessage,
+  getMessage,
+  getIndex,
 };
