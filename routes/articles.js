@@ -5,11 +5,12 @@ const articleDB = require('./../db/articles.js');
 routerArticles
   .route('/')
   .get((req, res) => {
-    articleDB.emptyMessage();
     res.render('templates/articles/index', articleDB.retrieveAll());
+    articleDB.removeMessage();
   })
   .post((req, res) => {
-    res.render('templates/articles/index', articleDB.create(req.body));
+    articleDB.create(req.body);
+    res.redirect('/articles');
   });
 
 routerArticles.route('/new').get((req, res) => {
@@ -20,18 +21,35 @@ routerArticles
   .route('/:title')
   .get((req, res) => {
     const articleUrl = req.url.slice(1);
-    articleDB.emptyMessage();
-    res.render(`templates/articles/${articleDB.retrieveOne(articleUrl).returnPage}`, articleDB.retrieveOne(articleUrl));
+    const findArticle = articleDB.getIndex(articleUrl);
+    if (findArticle === -1) {
+      return res.redirect('/articles');
+    }
+    // if last message on specific article was for a failed edit ...
+    // then remove the message when routing to "/articles/:urlTitle" ...
+    // since message was displayed originally on re-route to "/articles"
+    if (articleDB.getMessage(articleUrl) === '{ "success": false, "message": "No field values were provided" }') {
+      articleDB.removeMessage(articleUrl);
+    }
+    res.render(`templates/articles/article`, articleDB.retrieveOne(articleUrl));
+    articleDB.removeMessage(articleUrl);
   })
   .put((req, res) => {
     const endIndexQmark = req.url.indexOf('?', 1) - 1;
     const articleUrl = req.url.substr(1, endIndexQmark);
-    res.render('templates/articles/article', articleDB.update(req.body, articleUrl));
+    articleDB.update(req.body, articleUrl);
+    const errorMsg = articleDB.getMessage(articleUrl).indexOf('"success": false') > -1;
+    if (errorMsg) {
+      res.redirect('/articles');
+    } else {
+      res.redirect(`/article/${articleUrl}`);
+    }
   })
   .delete((req, res) => {
     const endIndexQmark = req.url.indexOf('?', 1) - 1;
     const articleUrl = req.url.substr(1, endIndexQmark);
-    res.render('templates/articles/index', articleDB.remove(articleUrl));
+    articleDB.remove(articleUrl);
+    res.redirect('/articles');
   });
 
 routerArticles.route('/:title/edit').get((req, res) => {

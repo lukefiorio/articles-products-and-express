@@ -1,7 +1,7 @@
 const articleCollection = {
   articles: [],
   message: '',
-  returnPage: '',
+  showMessage: false,
 };
 
 function create(obj) {
@@ -11,10 +11,10 @@ function create(obj) {
     obj.urlTitle = encodeURI(obj.title);
     articleCollection.articles.push(obj);
     articleCollection.message = '{ "success": true}';
-    return articleCollection;
+    articleCollection.showMessage = true;
   } else {
     articleCollection.message = '{ "success": false}';
-    return articleCollection;
+    articleCollection.showMessage = true;
   }
 }
 
@@ -27,19 +27,11 @@ function retrieveOne(articleTitle) {
   const articleIndex = articleCollection.articles.findIndex((elem) => elem.urlTitle === articleTitle);
   if (articleIndex === -1) {
     articleCollection.message = '{ "success": false, "message": "Article not found" }';
-    articleCollection.returnPage = 'index';
+    articleCollection.showMessage = true;
     return articleCollection;
   }
 
-  const articleToRetrieve = {
-    title: articleCollection.articles[articleIndex].title,
-    body: articleCollection.articles[articleIndex].body,
-    author: articleCollection.articles[articleIndex].author,
-    urlTitle: articleCollection.articles[articleIndex].urlTitle,
-    returnPage: 'article',
-  };
-
-  return articleToRetrieve;
+  return articleCollection.articles[articleIndex];
 }
 
 function update(obj, articleTitle) {
@@ -47,7 +39,8 @@ function update(obj, articleTitle) {
   const articleIndex = articleCollection.articles.findIndex((elem) => elem.urlTitle === articleTitle);
   if (articleIndex === -1) {
     articleCollection.message = '{ "success": false, "message": "Article not found" }';
-    return articleCollection;
+    articleCollection.showMessage = true;
+    return;
   }
 
   let msg = '';
@@ -70,15 +63,13 @@ function update(obj, articleTitle) {
     msg = '{ "success": true }';
   }
 
-  // apply values individually so they don't map back to original object
-  const articleToModify = {
-    title: articleCollection.articles[articleIndex].title,
-    body: articleCollection.articles[articleIndex].body,
-    author: articleCollection.articles[articleIndex].author,
-    urlTitle: articleCollection.articles[articleIndex].urlTitle,
-    message: msg,
-  };
-  return articleToModify;
+  // apply these values to individual article to handle redirect route = '/article/:titleURL'
+  articleCollection.articles[articleIndex].message = msg;
+  articleCollection.articles[articleIndex].showMessage = true;
+
+  // apply these values to colletion to handle redirect route = '/article'
+  articleCollection.message = msg;
+  articleCollection.showMessage = true;
 }
 
 function remove(articleTitle) {
@@ -86,16 +77,39 @@ function remove(articleTitle) {
   const articleIndex = articleCollection.articles.findIndex((elem) => elem.urlTitle === articleTitle);
   if (articleIndex === -1) {
     articleCollection.message = '{ "success": false, "message": "Article not found" }';
-    return articleCollection;
+    articleCollection.showMessage = true;
+    return;
   }
 
   articleCollection.articles.splice(articleIndex, 1);
   articleCollection.message = '{ "success": true}';
-  return articleCollection;
+  articleCollection.showMessage = true;
 }
 
-function emptyMessage() {
-  return (articleCollection.message = '');
+function removeMessage(articleTitle = '') {
+  articleCollection.showMessage = false;
+  const index = articleCollection.articles.findIndex((elem) => elem.urlTitle === articleTitle);
+  if (articleTitle !== '' && index > -1) {
+    articleCollection.articles[index].showMessage = false;
+  }
+}
+
+function getMessage(articleTitle = '') {
+  const index = articleCollection.articles.findIndex((elem) => elem.urlTitle === articleTitle);
+  if (articleTitle !== '' && index > -1) {
+    return articleCollection.articles[index].message;
+  }
+  return articleCollection.message;
+}
+
+function getIndex(articleTitle) {
+  const index = articleCollection.articles.findIndex((elem) => elem.urlTitle === articleTitle);
+  if (index === -1) {
+    articleCollection.message = '{ "success": false, "message": "Article not found" }';
+    articleCollection.showMessage = true;
+  }
+
+  return index;
 }
 
 module.exports = {
@@ -104,5 +118,7 @@ module.exports = {
   retrieveOne,
   update,
   remove,
-  emptyMessage,
+  removeMessage,
+  getMessage,
+  getIndex,
 };

@@ -14,7 +14,11 @@
   {{> header}}
   {{> nav}}
 
-  {{message}}
+  <p>
+    {{#if showMessage}}
+    {{message}}
+    {{/if}}
+  </p>
 
   <div class="detailBox">
     <div class="detailRow">

@@ -13,7 +13,11 @@
 <body>
   {{> header}}
   {{> nav}}
-  <p>{{message}}</p>
+  <p>
+    {{#if showMessage}}
+    {{message}}
+    {{/if}}
+  </p>
 
   <form action="/articles/new" method="get">
     <button class="AddItem" type="submit">Add an Article</button>
