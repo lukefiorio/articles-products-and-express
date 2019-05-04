@@ -14,20 +14,18 @@
   {{> header}}
   {{> nav}}
   <p>
-    {{#if showMessage}}
     {{message}}
-    {{/if}}
   </p>
 
   <form action="/articles/new" method="get">
     <button class="AddItem" type="submit">Add an Article</button>
   </form>
 
-  {{#each articles}}
+  {{#each rows}}
   <div class="content">
     <div>{{title}}</div>
-    <div>{{body}}</div>
     <div>{{author}}</div>
+    <div>{{body}}</div>
     <div class="optionButtons">
       <button class="optionButton" onclick="location.href='/articles/{{urlTitle}}'">View</button>
       <form action="/articles/{{urlTitle}}/edit" method="get">

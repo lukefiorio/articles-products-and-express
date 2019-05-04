@@ -13,7 +13,9 @@
 <body>
   {{> header}}
   {{> nav}}
-
+  <p>
+    {{message}}
+  </p>
   <div class="submitForm">
     <form class="newForm" action="/articles" method="post">
       <div class="formRow">
@@ -21,12 +23,12 @@
         <input type="text" id="title" name="title">
       </div>
       <div class="formRow">
-        <label for="body">Body:</label>
-        <input type="text" id="body" name="body">
-      </div>
-      <div class="formRow">
         <label for="author">Author:</label>
         <input type="text" id="author" name="author">
+      </div>
+      <div class="formRow">
+        <label for="body">Body:</label>
+        <input type="text" id="body" name="body">
       </div>
       <div class="button">
         <button type="submit">Submit your Article</button>

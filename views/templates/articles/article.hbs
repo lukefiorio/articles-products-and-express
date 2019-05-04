@@ -15,9 +15,7 @@
   {{> nav}}
 
   <p>
-    {{#if showMessage}}
     {{message}}
-    {{/if}}
   </p>
 
   <div class="detailBox">
@@ -26,12 +24,12 @@
       <p class="detail">{{title}}</p>
     </div>
     <div class="detailRow">
-      <p class="attribute">Body:</p>
-      <p class="detail">{{body}}</p>
-    </div>
-    <div class="detailRow">
       <p class="attribute">Author:</p>
       <p class="detail">{{author}}</p>
+    </div>
+    <div class="detailRow">
+      <p class="attribute">Body:</p>
+      <p class="detail">{{body}}</p>
     </div>
   </div>
 

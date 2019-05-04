@@ -1,62 +1,178 @@
 const express = require('express');
 const routerArticles = express.Router();
 const knex = require('../db');
-const articleDB = require('./../db/articles.js');
+let msg = '';
 
 routerArticles
   .route('/')
   .get((req, res) => {
-    res.render('templates/articles/index', articleDB.retrieveAll());
-    articleDB.removeMessage();
+    knex
+      .select()
+      .table('articles')
+      .orderBy('id')
+      .then((result) => {
+        let resultObj = { rows: result };
+        if (msg !== '') {
+          resultObj.message = msg;
+          msg = '';
+        }
+        return res.render('templates/articles/index', resultObj);
+      })
+      .catch((err) => {
+        res.status(500).send(err);
+      });
   })
   .post((req, res) => {
-    articleDB.create(req.body);
-    res.redirect('/articles');
+    const reqTitle = req.body.title;
+    const reqAuthor = req.body.author;
+    const reqBody = req.body.body;
+    let reqUrlTitle;
+    if (reqTitle) {
+      reqUrlTitle = encodeURI(reqTitle);
+    }
+    const hasKeys = reqTitle && reqAuthor && reqBody;
+    if (!hasKeys) {
+      msg = 'Must post all article fields';
+      return res.redirect('/articles/new');
+    }
+    knex('articles')
+      .insert({ title: reqTitle, author: reqAuthor, body: reqBody, urlTitle: reqUrlTitle })
+      .returning('*')
+      .then((result) => {
+        msg = 'Article succesfully added';
+        return res.redirect('/articles');
+      })
+      .catch((err) => {
+        res.status(500).send('err' + err);
+      });
   });
 
 routerArticles.route('/new').get((req, res) => {
-  res.render('templates/articles/new', articleDB.retrieveAll());
+  let resultObj = {};
+  if (msg !== '') {
+    resultObj.message = msg;
+    msg = '';
+  }
+  res.render('templates/articles/new', resultObj);
 });
 
 routerArticles
   .route('/:title')
   .get((req, res) => {
     const articleUrl = req.url.slice(1);
-    const findArticle = articleDB.getIndex(articleUrl);
-    if (findArticle === -1) {
-      return res.redirect('/articles');
-    }
-    // if last message on specific article was for a failed edit ...
-    // then remove the message when routing to "/articles/:urlTitle" ...
-    // since message was displayed originally on re-route to "/articles"
-    if (articleDB.getMessage(articleUrl) === '{ "success": false, "message": "No field values were provided" }') {
-      articleDB.removeMessage(articleUrl);
-    }
-    res.render(`templates/articles/article`, articleDB.retrieveOne(articleUrl));
-    articleDB.removeMessage(articleUrl);
+    knex
+      .select()
+      .table('articles')
+      .where('urlTitle', articleUrl)
+      .then((result) => {
+        if (result.length === 0) {
+          msg = 'Article not found';
+          return res.redirect('/articles');
+        }
+        let resultObj = result[0];
+        if (msg !== '') {
+          resultObj.message = msg;
+          msg = '';
+        }
+        res.render('templates/articles/article', resultObj);
+      })
+      .catch((err) => {
+        res.status(500).send(err);
+      });
   })
   .put((req, res) => {
     const endIndexQmark = req.url.indexOf('?', 1) - 1;
     const articleUrl = req.url.substr(1, endIndexQmark);
-    articleDB.update(req.body, articleUrl);
-    const errorMsg = articleDB.getMessage(articleUrl).indexOf('"success": false') > -1;
-    if (errorMsg) {
-      res.redirect('/articles');
-    } else {
-      res.redirect(`/article/${articleUrl}`);
-    }
+    knex
+      .select()
+      .table('articles')
+      .where('urlTitle', articleUrl)
+      .then((result) => {
+        if (result.length === 0) {
+          msg = 'Article not found';
+          return res.redirect('/articles');
+        }
+        let updateObj = {};
+        if (req.body.title) {
+          updateObj.title = req.body.title;
+          updateObj.urlTitle = encodeURI(req.body.title);
+        }
+        if (req.body.author) {
+          updateObj.author = req.body.author;
+        }
+        if (req.body.body) {
+          updateObj.body = req.body.body;
+        }
+
+        if (Object.keys(updateObj).length === 0) {
+          msg = 'No field values were provided';
+          return res.redirect(`/articles/${articleUrl}/edit`);
+        }
+        knex('articles')
+          .update(updateObj)
+          .where('urlTitle', articleUrl)
+          .then((result) => {
+            msg = 'Article succesfully updated.';
+            return res.redirect(`/articles/${articleUrl}`);
+          })
+          .catch((err) => {
+            res.status(500).send('err' + err);
+          });
+      })
+      .catch((err) => {
+        res.status(500).send('err' + err);
+      });
   })
   .delete((req, res) => {
     const endIndexQmark = req.url.indexOf('?', 1) - 1;
     const articleUrl = req.url.substr(1, endIndexQmark);
-    articleDB.remove(articleUrl);
-    res.redirect('/articles');
+    knex
+      .select()
+      .table('articles')
+      .where('urlTitle', articleUrl)
+      .then((result) => {
+        if (result.length === 0) {
+          msg = 'Article not found';
+          return res.redirect('/articles');
+        }
+        knex('articles')
+          .where('urlTitle', articleUrl)
+          .del()
+          .then((result) => {
+            msg = 'Article succesfully deleted';
+            res.redirect('/articles');
+          })
+          .catch((err) => {
+            res.status(500).send('err' + err);
+          });
+      })
+      .catch((err) => {
+        res.status(500).send('err' + err);
+      });
   });
 
 routerArticles.route('/:title/edit').get((req, res) => {
   const endIndexSlash = req.url.indexOf('/', 1) - 1;
   const articleUrl = req.url.substr(1, endIndexSlash);
-  res.render('templates/articles/edit', articleDB.retrieveOne(articleUrl));
+  knex
+    .select()
+    .table('articles')
+    .where('urlTitle', articleUrl)
+    .then((result) => {
+      if (result.length === 0) {
+        msg = 'Article not found';
+        return res.redirect('/articles');
+      }
+      let resultObj = result[0];
+      if (msg !== '') {
+        resultObj.message = msg;
+        msg = '';
+      }
+      res.render('templates/articles/edit', resultObj);
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
 });
 
 module.exports = routerArticles;
