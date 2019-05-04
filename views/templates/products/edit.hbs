@@ -13,6 +13,9 @@
 <body>
   {{> header}}
   {{> nav}}
+  <p>
+    {{message}}
+  </p>
 
   <div class="submitForm">
     <form class="editForm" action="/products/{{id}}?_method=PUT" method="post">

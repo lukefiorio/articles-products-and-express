@@ -14,19 +14,17 @@
   {{> header}}
   {{> nav}}
   <p>
-    {{#if showMessage}}
     {{message}}
-    {{/if}}
   </p>
 
   <form action="/products/new" method="get">
     <button class="AddItem" type="submit">Add a Product</button>
   </form>
 
-  {{#each products}}
+  {{#each rows}}
   <div class="content">
     <div>{{name}}</div>
-    <div>{{price}}</div>
+    <div>${{price}}</div>
     <div>{{inventory}}</div>
     <div>{{id}}</div>
     <div class="optionButtons">

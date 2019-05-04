@@ -1,5 +1,6 @@
 const express = require('express');
 const routerArticles = express.Router();
+const knex = require('../db');
 const articleDB = require('./../db/articles.js');
 
 routerArticles

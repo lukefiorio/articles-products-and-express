@@ -15,9 +15,7 @@
   {{> nav}}
 
   <p>
-    {{#if showMessage}}
     {{message}}
-    {{/if}}
   </p>
 
   <div class="detailBox">
@@ -27,7 +25,7 @@
     </div>
     <div class="detailRow">
       <p class="attribute">Price:</p>
-      <p class="detail">{{price}}</p>
+      <p class="detail">${{price}}</p>
     </div>
     <div class="detailRow">
       <p class="attribute">Inventory:</p>
