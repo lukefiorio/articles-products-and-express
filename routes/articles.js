@@ -150,7 +150,7 @@ routerArticles
         res.status(500).send('err' + err);
       });
   });
-
+// issues: don't allow same title; better way to deal with Qmark in title.
 routerArticles.route('/:title/edit').get((req, res) => {
   const endIndexSlash = req.url.indexOf('/', 1) - 1;
   const articleUrl = req.url.substr(1, endIndexSlash);
